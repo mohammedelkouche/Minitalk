@@ -6,12 +6,13 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:51:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2023/01/11 13:42:58 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2023/01/15 18:39:41 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <unistd.h>
+#include <signal.h>
 
 void	message(char *data, pid_t pid)
 {
@@ -21,14 +22,18 @@ void	message(char *data, pid_t pid)
 	while (*data)
 	{
 		i = 0;
-		while (i < 8)
+      // loop of each bit
+      while (i < 8)
 		{
 			if (*data & (128 >> i))
-			
+				kill(pid, SIGUSR1);
+			else
+				kill(pid, SIGUSR2);
+			i++;
+			usleep(300);
 		}
 		*data++;
 	}
-	
 }
 
 int	main(int argc, char **argv)
@@ -38,10 +43,23 @@ int	main(int argc, char **argv)
 
 	i = 0;
 	// 3 argument  : 1)./client 2)server pid 3) string to sent
-	// pid_t getpid(void);
 	if (argc == 3)
 	{
 		pid = atoi(argv[1]);
 		message(argv[2], pid);
 	}
 }
+// test
+
+// int	main(int argc, char *argv[])
+// {
+//    int	pid;
+
+//    if (argc != 2)
+//    {
+//    	printf("client: invalid arguments\n");
+//    }
+//    pid = atoi(argv[1]);
+//    kill(pid, SIGUSR1);
+//    return (0);
+// }
