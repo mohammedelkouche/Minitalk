@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 10:52:16 by mel-kouc          #+#    #+#             */
-/*   Updated: 2023/01/15 21:04:35 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2023/01/16 21:34:25 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,33 @@
 #include <unistd.h>
 #include <signal.h>
 
+// append bit in array (string) whith strncat
 void	handler(int signum)
 {
 	static char	c;
-	static int	bit;
+	char		bit[9];
 
-	// if (signum == SIGUSR1)
-
+	if (signum == SIGUSR1)
+		write(1, "1", 1);
+	else if (signum == SIGUSR2)
+		write(1, "0", 1);
 }
 
 int	main(void)
 {
-	pid_t					pid;
 	struct sigaction		signal;
 
-	pid = getpid();
-	signal.sa_handler = &handler;
+	signal.sa_handler = handler;
+	// signal.
+	printf("%d\n", getpid());
 	while (1)
+	{
+		// printf("hellow \n");
+		sigaction(SIGUSR1, &signal, NULL);
+		sigaction(SIGUSR2, &signal, NULL);
 		pause();
+		// printf("world!\n");
+	}
 }
 
 // test

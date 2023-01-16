@@ -6,13 +6,14 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:51:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2023/01/15 18:39:41 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2023/01/16 10:38:37 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
+#include <stdlib.h>
 
 void	message(char *data, pid_t pid)
 {
@@ -30,9 +31,9 @@ void	message(char *data, pid_t pid)
 			else
 				kill(pid, SIGUSR2);
 			i++;
-			usleep(300);
+			usleep(500);
 		}
-		*data++;
+		data++;
 	}
 }
 
