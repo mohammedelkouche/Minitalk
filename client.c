@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:51:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2023/01/16 10:38:37 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2023/01/17 18:42:26 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	message(char *data, pid_t pid)
 	while (*data)
 	{
 		i = 0;
-      // loop of each bit
-      while (i < 8)
+		// loop of each bit
+		while (i < 8)
 		{
 			if (*data & (128 >> i))
 				kill(pid, SIGUSR1);
@@ -50,17 +50,3 @@ int	main(int argc, char **argv)
 		message(argv[2], pid);
 	}
 }
-// test
-
-// int	main(int argc, char *argv[])
-// {
-//    int	pid;
-
-//    if (argc != 2)
-//    {
-//    	printf("client: invalid arguments\n");
-//    }
-//    pid = atoi(argv[1]);
-//    kill(pid, SIGUSR1);
-//    return (0);
-// }

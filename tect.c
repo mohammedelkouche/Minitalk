@@ -26,7 +26,7 @@ int	main(void)
 	somme = 0;
 	index = 0;
 	base = 2;
-	char t[9] = "01100001";
+	char t[9] = "01000110";
 	j = strlen(t);
 	j--;
 	while (t[j])
@@ -34,12 +34,12 @@ int	main(void)
 		if (t[j] == '1')
 		{
 			somme = somme + ft_power(base, index);
-			printf("%d\n", somme);
+			// printf("%d\n", somme);
 		}
 		index++;
 		j--;
 	}
-	printf("\n%d\n", somme);
+	// printf("\n%d\n", somme);
 	putchar(somme);
 }
 
