@@ -1,19 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:51:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2023/01/17 18:42:26 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2023/01/19 22:51:36 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <stdlib.h>
+#include "minitalk_bonus.h"
 
 void	message(char *data, pid_t pid)
 {
@@ -22,16 +19,15 @@ void	message(char *data, pid_t pid)
 	// loop of each character
 	while (*data)
 	{
-		i = 0;
+		i = -1;
 		// loop of each bit
-		while (i < 8)
+		while (++i < 8)
 		{
 			if (*data & (128 >> i))
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			i++;
-			usleep(500);
+			usleep(700);
 		}
 		data++;
 	}
@@ -40,13 +36,13 @@ void	message(char *data, pid_t pid)
 int	main(int argc, char **argv)
 {
 	pid_t	pid;
-	int		i;
 
-	i = 0;
+	pid = ft_atoi(argv[1]);
 	// 3 argument  : 1)./client 2)server pid 3) string to sent
-	if (argc == 3)
+	if (argc != 3 || pid < (pid_t)0)
 	{
-		pid = atoi(argv[1]);
-		message(argv[2], pid);
+		write(2, "error\n", 6);
+		exit(1);
 	}
+	message(argv[2], pid);
 }

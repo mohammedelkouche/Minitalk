@@ -5,39 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/12 10:52:16 by mel-kouc          #+#    #+#             */
-/*   Updated: 2023/01/17 21:35:30 by mel-kouc         ###   ########.fr       */
+/*   Created: 2023/01/19 18:42:58 by mel-kouc          #+#    #+#             */
+/*   Updated: 2023/01/19 21:17:40 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <string.h>
+#include "minitalk.h"
 
 char	g_bit[8];
-
-// 
-// void	handler(int signum)
-// {
-// 	static int i = 0;
-// 	static char	c = 0;
-
-// 	if (signum == SIGUSR1)
-// 		c = c * 2 + 1;
-
-// 	else if (signum == SIGUSR2)
-// 		c = c * 2;
-
-// 	i++;
-// 	if(i == 8)
-// 	{
-// 		printf("%c\n", c);
-// 		i = 0;
-// 		c = 0;
-// 	}
-// }
-
 
 int	ft_power(int base, int index)
 {
@@ -54,11 +29,6 @@ int	ft_power(int base, int index)
 	return (res);
 }
 
-void	ft_putchar(char c)
-{
-	write(1, &c, 1);
-}
-
 void	printchar(char	*c)
 {
 	int	j;
@@ -69,7 +39,7 @@ void	printchar(char	*c)
 	somme = 0;
 	index = 0;
 	base = 2;
-	j = strlen(c);
+	j = ft_strlen(c);
 	j--;
 	while (c[j])
 	{
@@ -78,14 +48,26 @@ void	printchar(char	*c)
 		index++;
 		j--;
 	}
-	ft_putchar(somme);
+	write(1, &somme, 1);
 }
-
 // append bit character in array
-void	handler(int signum)
-{
-	static int	i;
 
+void	handlersignal(int signum, siginfo_t *info)
+{
+	static int			i;
+	size_t				j;
+	static pid_t		s_pid;
+
+	j = 0;
+	if (s_pid != info->si_pid)
+	{
+		while (j < 8)
+		{
+			g_bit[j] = 0;
+			j++;
+		}
+		i = 0;
+	}
 	if (signum == SIGUSR1)
 		g_bit[i++] = '1';
 	else if (signum == SIGUSR2)
@@ -95,24 +77,21 @@ void	handler(int signum)
 		printchar(g_bit);
 		i = 0;
 	}
+	s_pid = info->si_pid;
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
-	struct sigaction		signal;
+	struct sigaction		action;
 
-	signal.sa_handler = handler;
-	printf("%d\n", getpid());
+	(void)argc;
+	(void)argv;
+	action.sa_handler = (void *)handlersignal;
+	ft_putnb(getpid());
 	while (1)
 	{
-		sigaction(SIGUSR1, &signal, NULL);
-		sigaction(SIGUSR2, &signal, NULL);
+		sigaction(SIGUSR1, &action, NULL);
+		sigaction(SIGUSR2, &action, NULL);
 		pause();
 	}
-	return (0);
 }
-
-
-
-
-
