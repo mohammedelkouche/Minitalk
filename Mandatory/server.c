@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 18:42:58 by mel-kouc          #+#    #+#             */
-/*   Updated: 2023/01/19 21:17:40 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2023/01/20 14:25:34 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,13 @@ void	printchar(char	*c)
 }
 // append bit character in array
 
-void	handlersignal(int signum, siginfo_t *info)
+void	handlersignal(int signum, siginfo_t *info, void *p)
 {
 	static int			i;
 	size_t				j;
 	static pid_t		s_pid;
 
+	(void)p;
 	j = 0;
 	if (s_pid != info->si_pid)
 	{
@@ -88,10 +89,8 @@ int	main(int argc, char **argv)
 	(void)argv;
 	action.sa_handler = (void *)handlersignal;
 	ft_putnb(getpid());
+	sigaction(SIGUSR1, &action, NULL);
+	sigaction(SIGUSR2, &action, NULL);
 	while (1)
-	{
-		sigaction(SIGUSR1, &action, NULL);
-		sigaction(SIGUSR2, &action, NULL);
 		pause();
-	}
 }

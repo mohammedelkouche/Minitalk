@@ -6,13 +6,13 @@
 #    By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/19 17:06:56 by mel-kouc          #+#    #+#              #
-#    Updated: 2023/01/19 22:50:52 by mel-kouc         ###   ########.fr        #
+#    Updated: 2023/01/20 11:48:23 by mel-kouc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 SRCS_CLIENT = Mandatory/client.c Mandatory/utile.c Mandatory/atoi.c
-SRCS_SEREVR = Mandatory/server.c Mandatory/utile.c Mandatory/atoi.c
+SRCS_SERVER = Mandatory/server.c Mandatory/utile.c Mandatory/atoi.c
 
 SRCS_CLIENT_BONUS = bonus/client_bonus.c bonus/utile_bonus.c bonus/atoi_bonus.c
 SRCS_SERVER_BONUS = bonus/server_bonus.c bonus/utile_bonus.c bonus/atoi_bonus.c
@@ -43,10 +43,6 @@ $(SERVER_BONUS): $(SERVER_OBJ_BONUS)
 
 $(CLIENT_BONUS): $(CLIENT_OBJ_BONUS)
 	@cc -Werror -Wextra -Wall $(CLIENT_OBJ_BONUS) -o $(CLIENT_BONUS)
-
-
-# %.o:%.c man/minitalk.h bonus/minitalk_bonus.h
-# 	@cc -Werror -Wextra -Wall -c $^ -o $@
 
 clean:
 	rm -f  $(SERVER_OBJ) $(CLIENT_OBJ) $(CLIENT_OBJ_BONUS) $(SERVER_OBJ_BONUS)

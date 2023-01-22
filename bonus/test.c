@@ -1,18 +1,53 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_bonus.c                                     :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/19 22:36:52 by mel-kouc          #+#    #+#             */
-/*   Updated: 2023/01/21 10:32:41 by mel-kouc         ###   ########.fr       */
+/*   Created: 2023/01/21 10:55:26 by mel-kouc          #+#    #+#             */
+/*   Updated: 2023/01/22 19:46:10 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk_bonus.h"
+#include <stdio.h>
 
-char	g_bit[8];
+static int	g_total;
+
+void	total_byte(int nbyte, int sum, int flag)
+{
+	g_total = g_total + sum;
+	nbyte--;
+	if (nbyte == 0)
+	{
+		ft_putxchar(g_total);
+		g_total = 0;
+		flag = 0;
+	}
+}
+
+void	check_byte(int sum)
+{
+	int static	nbyte;
+	int static	flag;
+
+	// if (g_total == 0)
+	// 	flag = 0;
+	if (flag == 0)
+	{
+		if (sum < 128)
+			nbyte = 1;
+		else if (sum >= 192 && sum < 224)
+			nbyte = 2;
+		else if (sum >= 224 && sum < 240)
+			nbyte = 3;
+		else if (sum >= 240 && sum < 248)
+			nbyte = 4;
+		flag = 1;
+	}
+	total_byte(nbyte, sum, flag);
+}
 
 int	ft_power(int base, int index)
 {
@@ -29,14 +64,14 @@ int	ft_power(int base, int index)
 	return (res);
 }
 
-void	printchar(char	*c)
+void	sum_char(char	*c)
 {
 	int	j;
-	int	somme;
+	int	sum;
 	int	index;
 	int	base;
 
-	somme = 0;
+	sum = 0;
 	index = 0;
 	base = 2;
 	j = ft_strlen(c);
@@ -44,19 +79,19 @@ void	printchar(char	*c)
 	while (c[j])
 	{
 		if (c[j] == '1')
-			somme = somme + ft_power(base, index);
+			sum = sum + ft_power(base, index);
 		index++;
 		j--;
 	}
-	write(1, &somme, 1);
+	check_byte(sum);
 }
-// append bit character in array
 
 void	handlersignal(int signum, siginfo_t *info, void *p)
 {
 	static int			i;
 	size_t				j;
 	static pid_t		s_pid;
+	static char			g_bit[8];
 
 	(void)p;
 	j = -1;
@@ -65,6 +100,7 @@ void	handlersignal(int signum, siginfo_t *info, void *p)
 		while (++j < 8)
 			g_bit[j] = 0;
 		i = 0;
+		g_total = 0;
 	}
 	if (signum == SIGUSR1)
 		g_bit[i++] = '1';
@@ -72,7 +108,7 @@ void	handlersignal(int signum, siginfo_t *info, void *p)
 		g_bit[i++] = '0';
 	if (i == 8)
 	{
-		printchar(g_bit);
+		sum_char(g_bit);
 		i = 0;
 	}
 	s_pid = info->si_pid;
