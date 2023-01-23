@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 13:39:23 by mel-kouc          #+#    #+#             */
-/*   Updated: 2023/01/19 21:43:13 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2023/01/23 20:55:13 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,5 @@ void	ft_putxchar(char c);
 void	ft_putnb(int nb);
 int		ft_atoi(const char *str);
 
+        
 #endif

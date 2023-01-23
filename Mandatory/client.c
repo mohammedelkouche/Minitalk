@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:51:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2023/01/19 18:32:48 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2023/01/23 22:41:36 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,16 @@ int	main(int argc, char **argv)
 {
 	pid_t	pid;
 
-	pid = ft_atoi(argv[1]);
 	// 3 argument  : 1)./client 2)server pid 3) string to sent
-	if (argc != 3 || pid < (pid_t)0)
+	if(argc != 3)
 	{
-		write(2, "error\n", 6);
+		write(1, "error\n", 6);
+		exit(1);
+	}
+	pid = ft_atoi(argv[1]);
+	if (pid <= 0)
+	{
+		write(1, "error\n", 6);
 		exit(1);
 	}
 	message(argv[2], pid);

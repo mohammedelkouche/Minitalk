@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/21 10:55:26 by mel-kouc          #+#    #+#             */
-/*   Updated: 2023/01/22 19:46:10 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2023/01/23 15:52:29 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void	handlersignal(int signum, siginfo_t *info, void *p)
 		g_bit[i++] = '1';
 	else if (signum == SIGUSR2)
 		g_bit[i++] = '0';
+	printf("%c", g_bit[i]);
 	if (i == 8)
 	{
 		sum_char(g_bit);
@@ -121,7 +122,9 @@ int	main(int argc, char **argv)
 	(void)argc;
 	(void)argv;
 	action.sa_handler = (void *)handlersignal;
+	
 	ft_putnb(getpid());
+	ft_putxchar('\n');
 	sigaction(SIGUSR1, &action, NULL);
 	sigaction(SIGUSR2, &action, NULL);
 	while (1)

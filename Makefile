@@ -6,7 +6,7 @@
 #    By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/19 17:06:56 by mel-kouc          #+#    #+#              #
-#    Updated: 2023/01/20 11:48:23 by mel-kouc         ###   ########.fr        #
+#    Updated: 2023/01/23 21:57:04 by mel-kouc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,9 @@ $(SERVER_BONUS): $(SERVER_OBJ_BONUS)
 
 $(CLIENT_BONUS): $(CLIENT_OBJ_BONUS)
 	@cc -Werror -Wextra -Wall $(CLIENT_OBJ_BONUS) -o $(CLIENT_BONUS)
+
+%.o: %.c Mandatory/minitalk.h bonus/minitalk_bonus.h
+	@CC -Werror -Wextra -Wall -c $< -o $@
 
 clean:
 	rm -f  $(SERVER_OBJ) $(CLIENT_OBJ) $(CLIENT_OBJ_BONUS) $(SERVER_OBJ_BONUS)

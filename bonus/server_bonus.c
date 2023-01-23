@@ -6,13 +6,11 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 22:36:52 by mel-kouc          #+#    #+#             */
-/*   Updated: 2023/01/21 10:32:41 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2023/01/23 22:07:05 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk_bonus.h"
-
-char	g_bit[8];
 
 int	ft_power(int base, int index)
 {
@@ -29,7 +27,7 @@ int	ft_power(int base, int index)
 	return (res);
 }
 
-void	printchar(char	*c)
+void	printchar(char	*c, pid_t s_pid)
 {
 	int	j;
 	int	somme;
@@ -48,7 +46,9 @@ void	printchar(char	*c)
 		index++;
 		j--;
 	}
-	write(1, &somme, 1);
+	if (somme == 0)
+		kill(s_pid, SIGUSR1);
+	ft_putxchar(somme);
 }
 // append bit character in array
 
@@ -57,25 +57,26 @@ void	handlersignal(int signum, siginfo_t *info, void *p)
 	static int			i;
 	size_t				j;
 	static pid_t		s_pid;
+	static char			byte[8];
 
 	(void)p;
 	j = -1;
 	if (s_pid != info->si_pid)
 	{
 		while (++j < 8)
-			g_bit[j] = 0;
+			byte[j] = 0;
 		i = 0;
+		s_pid = info->si_pid;
 	}
 	if (signum == SIGUSR1)
-		g_bit[i++] = '1';
+		byte[i++] = '1';
 	else if (signum == SIGUSR2)
-		g_bit[i++] = '0';
+		byte[i++] = '0';
 	if (i == 8)
 	{
-		printchar(g_bit);
+		printchar(byte, s_pid);
 		i = 0;
 	}
-	s_pid = info->si_pid;
 }
 
 int	main(int argc, char **argv)
@@ -86,6 +87,7 @@ int	main(int argc, char **argv)
 	(void)argv;
 	action.sa_handler = (void *)handlersignal;
 	ft_putnb(getpid());
+	ft_putxchar('\n');
 	sigaction(SIGUSR1, &action, NULL);
 	sigaction(SIGUSR2, &action, NULL);
 	while (1)
