@@ -6,48 +6,54 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:51:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2023/01/23 22:41:36 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2023/01/24 17:47:05 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	message(char *data, pid_t pid)
+void	handelerror(void)
+{
+	write(1, "error\n", 6);
+	exit(1);
+}
+
+// loop of each bit
+void	bitchar(char c, pid_t pid)
 {
 	int	i;
 
-	// loop of each character
-	while (*data)
+	i = -1;
+	while (++i < 8)
 	{
-		i = -1;
-		// loop of each bit
-		while (++i < 8)
-		{
-			if (*data & (128 >> i))
-				kill(pid, SIGUSR1);
-			else
-				kill(pid, SIGUSR2);
-			usleep(700);
-		}
-		data++;
+		if (c & (128 >> i))
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
+		usleep(700);
 	}
 }
 
+// loop of each character
+void	message(char *data, pid_t pid)
+{
+	while (*data)
+	{
+		bitchar(*data, pid);
+		data++;
+	}
+	bitchar('\0', pid);
+}
+
+// 3 argument  : 1)./client 2)server pid 3) string to sent
 int	main(int argc, char **argv)
 {
 	pid_t	pid;
 
-	// 3 argument  : 1)./client 2)server pid 3) string to sent
-	if(argc != 3)
-	{
-		write(1, "error\n", 6);
-		exit(1);
-	}
+	if (argc != 3)
+		handelerror();
 	pid = ft_atoi(argv[1]);
 	if (pid <= 0)
-	{
-		write(1, "error\n", 6);
-		exit(1);
-	}
+		handelerror();
 	message(argv[2], pid);
 }
