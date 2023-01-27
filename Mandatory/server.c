@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 18:42:58 by mel-kouc          #+#    #+#             */
-/*   Updated: 2023/01/23 17:24:59 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2023/01/27 15:24:33 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,18 @@ int	main(int argc, char **argv)
 {
 	struct sigaction		action;
 
-	(void)argc;
 	(void)argv;
-	action.sa_handler = (void *)handlersignal;
-	ft_putnb(getpid());
-	ft_putxchar('\n');
-	sigaction(SIGUSR1, &action, NULL);
-	sigaction(SIGUSR2, &action, NULL);
-	while (1)
-		pause();
+	if (argc == 1)
+	{
+		action.sa_sigaction = handlersignal;
+		action.sa_flags = SA_SIGINFO;
+		ft_putnb(getpid());
+		ft_putxchar('\n');
+		sigaction(SIGUSR1, &action, NULL);
+		sigaction(SIGUSR2, &action, NULL);
+		while (1)
+			pause();
+	}
+	write(1, "error\n", 6);
+	return (0);
 }
